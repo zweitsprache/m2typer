@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Configuration Page</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        .container {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr); /* Creates 10 columns */
+            gap: 10px;
+            padding: 20px;
+        }
+        .autocomplete, .image-display, .audio-player {
+            width: 100%; /* Full width of the column */
+        }
+        .autocomplete {
+            padding: 8px;
+            box-sizing: border-box; /* Includes padding in width */
+        }
+        .image-display {
+            height: 100px; /* Fixed height for images */
+            overflow: hidden; /* Keeps large images contained */
+        }
+        img {
+            max-width: 100%; /* Ensures image does not overflow its container */
+            height: auto; /* Keeps image aspect ratio */
+        }
+        .audio-player {
+            display: none; /* Hide audio players */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Autocomplete inputs -->
+        <input class="autocomplete" id="search1">
+        <input class="autocomplete" id="search2">
+        <input class="autocomplete" id="search3">
+        <input class="autocomplete" id="search4">
+        <input class="autocomplete" id="search5">
+        <input class="autocomplete" id="search6">
+        <input class="autocomplete" id="search7">
+        <input class="autocomplete" id="search8">
+        <input class="autocomplete" id="search9">
+        <input class="autocomplete" id="search10">
+    </div>
+    <div class="container">
+        <!-- Image and audio containers -->
+        <div id="media1">
+            <div class="image-display"></div>
+            <audio class="audio-player" id="audio-player1"></audio>
+        </div>
+        <div id="media2">
+            <div class="image-display"></div>
+            <audio class="audio-player" id="audio-player2"></audio>
+        </div>
+        <div id="media3">
+            <div class="image-display"></div>
+            <audio class="audio-player" id="audio-player3"></audio>
+        </div>
+        <div id="media4">
+            <div class="image-display"></div>
+            <audio class="audio-player" id="audio-player4"></audio>
+        </div>
+        <div id="media5">
+            <div class="image-display"></div>
+            <audio class="audio-player" id="audio-player5"></audio>
+        </div>
+        <div id="media6">
+            <div class="image-display"></div>
+            <audio class="audio-player" id="audio-player6"></audio>
+        </div>
+        <div id="media7">
+            <div class="image-display"></div>
+            <audio class="audio-player" id="audio-player7"></audio>
+        </div>
+        <div id="media8">
+            <div class="image-display"></div>
+            <audio class="audio-player" id="audio-player8"></audio>
+        </div>
+        <div id="media9">
+            <div class="image-display"></div>
+            <audio class="audio-player" id="audio-player9"></audio>
+        </div>
+        <div id="media10">
+            <div class="image-display"></div>
+            <audio class="audio-player" id="audio-player10"></audio>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+
+    <script>
+      $(function() {
+          $.getJSON("data.json", function(data) {
+              var values = data.map(item => item.value);
+              $(".autocomplete").autocomplete({
+                  source: values,
+                  select: function(event, ui) {
+                      var index = this.id.replace('search', '');
+                      var selectedItem = data.find(item => item.value === ui.item.value);
+                      if (selectedItem) {
+                          $('#media' + index + ' .image-display').html('<img src="' + selectedItem.image + '" alt="' + ui.item.value + '">');
+                          var audioPlayer = $('#audio-player' + index);
+                          audioPlayer.attr('src', selectedItem.audio);
+                          audioPlayer[0].play();
+                          audioPlayer.show();  // This line ensures that the audio player is displayed when a selection is made
+                      }
+                  }
+              });
+          }).fail(function(jqxhr, textStatus, error) {
+              var err = textStatus + ", " + error;
+              console.error("Request Failed: " + err);
+          });
+      });
+  </script>
+
+
+
+
+</body>
+</html>
